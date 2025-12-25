@@ -9,16 +9,36 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/controller"
 
-	resource "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/null/resource"
+	binding "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/binding/binding"
+	exchange "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/exchange/exchange"
+	upstream "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/federationupstream/upstream"
+	policy "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/operatorpolicy/policy"
+	permissions "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/permissions/permissions"
+	policypolicy "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/policy/policy"
 	providerconfig "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/providerconfig"
+	queue "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/queue/queue"
+	shovel "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/shovel/shovel"
+	permissionstopicpermissions "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/topicpermissions/permissions"
+	user "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/user/user"
+	vhost "github.com/Volevanius/provider-rabbitmqtf/internal/controller/namespaced/vhost/vhost"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		binding.Setup,
+		exchange.Setup,
+		upstream.Setup,
+		policy.Setup,
+		permissions.Setup,
+		policypolicy.Setup,
 		providerconfig.Setup,
+		queue.Setup,
+		shovel.Setup,
+		permissionstopicpermissions.Setup,
+		user.Setup,
+		vhost.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -31,8 +51,18 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 // the supplied manager gated.
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.SetupGated,
+		binding.SetupGated,
+		exchange.SetupGated,
+		upstream.SetupGated,
+		policy.SetupGated,
+		permissions.SetupGated,
+		policypolicy.SetupGated,
 		providerconfig.SetupGated,
+		queue.SetupGated,
+		shovel.SetupGated,
+		permissionstopicpermissions.SetupGated,
+		user.SetupGated,
+		vhost.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

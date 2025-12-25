@@ -1,0 +1,89 @@
+apiVersion: binding.rabbitmqtf.crossplane.io/v1alpha1
+kind: Binding
+metadata:
+  annotations:
+    meta.upbound.io/example-id: binding/v1alpha1/binding
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    destination: ${rabbitmq_queue.test.name}
+    destinationType: queue
+    routingKey: '#'
+    source: ${rabbitmq_exchange.test.name}
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
+apiVersion: exchange.rabbitmqtf.crossplane.io/v1alpha1
+kind: Exchange
+metadata:
+  annotations:
+    meta.upbound.io/example-id: binding/v1alpha1/binding
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    settings:
+    - autoDelete: true
+      durable: false
+      type: fanout
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: guest
+
+---
+
+apiVersion: permissions.rabbitmqtf.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: binding/v1alpha1/binding
+  labels:
+    testing.upbound.io/example-name: guest
+  name: guest
+spec:
+  forProvider:
+    permissions:
+    - configure: .*
+      read: .*
+      write: .*
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
+apiVersion: queue.rabbitmqtf.crossplane.io/v1alpha1
+kind: Queue
+metadata:
+  annotations:
+    meta.upbound.io/example-id: binding/v1alpha1/binding
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    settings:
+    - autoDelete: false
+      durable: true
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: guest
+
+---
+
+apiVersion: vhost.rabbitmqtf.crossplane.io/v1alpha1
+kind: Vhost
+metadata:
+  annotations:
+    meta.upbound.io/example-id: binding/v1alpha1/binding
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider: {}

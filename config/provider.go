@@ -6,8 +6,31 @@ import (
 
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 
-	nullCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/null"
-	nullNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/null"
+	// Cluster-scoped resource configurations
+	bindingCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/binding"
+	exchangeCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/exchange"
+	federationupstreamCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/federation_upstream"
+	operatorpolicyCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/operator_policy"
+	permissionsCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/permissions"
+	policyCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/policy"
+	queueCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/queue"
+	shovelCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/shovel"
+	topicpermissionsCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/topic_permissions"
+	userCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/user"
+	vhostCluster "github.com/Volevanius/provider-rabbitmqtf/config/cluster/vhost"
+
+	// Namespaced resource configurations
+	bindingNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/binding"
+	exchangeNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/exchange"
+	federationupstreamNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/federation_upstream"
+	operatorpolicyNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/operator_policy"
+	permissionsNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/permissions"
+	policyNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/policy"
+	queueNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/queue"
+	shovelNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/shovel"
+	topicpermissionsNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/topic_permissions"
+	userNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/user"
+	vhostNamespaced "github.com/Volevanius/provider-rabbitmqtf/config/namespaced/vhost"
 )
 
 const (
@@ -24,7 +47,7 @@ var providerMetadata string
 // GetProvider returns provider configuration
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
-		ujconfig.WithRootGroup("rabbitmqtf."),
+		ujconfig.WithRootGroup("rabbitmqtf.crossplane.io"),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
@@ -32,8 +55,18 @@ func GetProvider() *ujconfig.Provider {
 		))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
-		// add custom config functions
-		nullCluster.Configure,
+		// RabbitMQ resource configurations
+		vhostCluster.Configure,
+		userCluster.Configure,
+		permissionsCluster.Configure,
+		topicpermissionsCluster.Configure,
+		exchangeCluster.Configure,
+		queueCluster.Configure,
+		bindingCluster.Configure,
+		policyCluster.Configure,
+		operatorpolicyCluster.Configure,
+		federationupstreamCluster.Configure,
+		shovelCluster.Configure,
 	} {
 		configure(pc)
 	}
@@ -45,7 +78,7 @@ func GetProvider() *ujconfig.Provider {
 // GetProviderNamespaced returns the namespaced provider configuration
 func GetProviderNamespaced() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
-		ujconfig.WithRootGroup("rabbitmqtf.m."),
+		ujconfig.WithRootGroup("rabbitmqtf.m.crossplane.io"),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
@@ -56,8 +89,18 @@ func GetProviderNamespaced() *ujconfig.Provider {
 		}))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
-		// add custom config functions
-		nullNamespaced.Configure,
+		// RabbitMQ resource configurations
+		vhostNamespaced.Configure,
+		userNamespaced.Configure,
+		permissionsNamespaced.Configure,
+		topicpermissionsNamespaced.Configure,
+		exchangeNamespaced.Configure,
+		queueNamespaced.Configure,
+		bindingNamespaced.Configure,
+		policyNamespaced.Configure,
+		operatorpolicyNamespaced.Configure,
+		federationupstreamNamespaced.Configure,
+		shovelNamespaced.Configure,
 	} {
 		configure(pc)
 	}

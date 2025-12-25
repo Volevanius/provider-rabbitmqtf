@@ -1,0 +1,10 @@
+apiVersion: vhost.rabbitmqtf.crossplane.io/v1alpha1
+kind: VHost
+metadata:
+  name: example-vhost
+spec:
+  forProvider:
+    name: example-vhost
+    description: "Managed by Crossplane"
+  providerConfigRef:
+    name: default

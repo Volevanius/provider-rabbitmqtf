@@ -1,0 +1,101 @@
+apiVersion: federationupstream.rabbitmqtf.m.crossplane.io/v1alpha1
+kind: Upstream
+metadata:
+  annotations:
+    meta.upbound.io/example-id: federationupstream/v1alpha1/upstream
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+  namespace: crossplane-system
+spec:
+  forProvider:
+    definition:
+    - ackMode: on-confirm
+      maxHops: 1
+      prefetchCount: 1000
+      reconnectDelay: 5
+      trustUserId: false
+      uriSecretRef:
+        key: example-key
+        name: example-secret
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: guest
+
+---
+
+apiVersion: exchange.rabbitmqtf.m.crossplane.io/v1alpha1
+kind: Exchange
+metadata:
+  annotations:
+    meta.upbound.io/example-id: federationupstream/v1alpha1/upstream
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+  namespace: crossplane-system
+spec:
+  forProvider:
+    settings:
+    - durable: "true"
+      type: topic
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: guest
+
+---
+
+apiVersion: permissions.rabbitmqtf.m.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: federationupstream/v1alpha1/upstream
+  labels:
+    testing.upbound.io/example-name: guest
+  name: guest
+  namespace: crossplane-system
+spec:
+  forProvider:
+    permissions:
+    - configure: .*
+      read: .*
+      write: .*
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
+apiVersion: policy.rabbitmqtf.m.crossplane.io/v1alpha1
+kind: Policy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: federationupstream/v1alpha1/upstream
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+  namespace: crossplane-system
+spec:
+  forProvider:
+    policy:
+    - applyTo: exchanges
+      definition:
+        federation-upstream: foo
+      pattern: foo
+      priority: 1
+    vhostSelector:
+      matchLabels:
+        testing.upbound.io/example-name: guest
+
+---
+
+apiVersion: vhost.rabbitmqtf.m.crossplane.io/v1alpha1
+kind: Vhost
+metadata:
+  annotations:
+    meta.upbound.io/example-id: federationupstream/v1alpha1/upstream
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider: {}

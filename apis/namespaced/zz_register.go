@@ -10,17 +10,37 @@ package namespaced
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/null/v1alpha1"
+	v1alpha1 "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/binding/v1alpha1"
+	v1alpha1exchange "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/exchange/v1alpha1"
+	v1alpha1federationupstream "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/federationupstream/v1alpha1"
+	v1alpha1operatorpolicy "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/operatorpolicy/v1alpha1"
+	v1alpha1permissions "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/permissions/v1alpha1"
+	v1alpha1policy "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/policy/v1alpha1"
+	v1alpha1queue "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/queue/v1alpha1"
+	v1alpha1shovel "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/shovel/v1alpha1"
+	v1alpha1topicpermissions "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/topicpermissions/v1alpha1"
+	v1alpha1user "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/user/v1alpha1"
 	v1alpha1namespaced "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/v1alpha1"
 	v1beta1 "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/v1beta1"
+	v1alpha1vhost "github.com/Volevanius/provider-rabbitmqtf/apis/namespaced/vhost/v1alpha1"
 )
 
 func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1exchange.SchemeBuilder.AddToScheme,
+		v1alpha1federationupstream.SchemeBuilder.AddToScheme,
+		v1alpha1operatorpolicy.SchemeBuilder.AddToScheme,
+		v1alpha1permissions.SchemeBuilder.AddToScheme,
+		v1alpha1policy.SchemeBuilder.AddToScheme,
+		v1alpha1queue.SchemeBuilder.AddToScheme,
+		v1alpha1shovel.SchemeBuilder.AddToScheme,
+		v1alpha1topicpermissions.SchemeBuilder.AddToScheme,
+		v1alpha1user.SchemeBuilder.AddToScheme,
 		v1alpha1namespaced.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
+		v1alpha1vhost.SchemeBuilder.AddToScheme,
 	)
 }
 

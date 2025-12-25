@@ -7,11 +7,32 @@ import (
 // ExternalNameConfigs contains all external name configurations for this
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
-	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"null_resource": idWithStub(),
+	// rabbitmq_vhost: import using name
+	"rabbitmq_vhost": config.NameAsIdentifier,
+	// rabbitmq_user: import using name
+	"rabbitmq_user": config.NameAsIdentifier,
+	// rabbitmq_permissions: import using user@vhost
+	"rabbitmq_permissions": config.TemplatedStringAsIdentifier("user", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_topic_permissions: import using user@vhost
+	"rabbitmq_topic_permissions": config.TemplatedStringAsIdentifier("user", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_exchange: import using name@vhost
+	"rabbitmq_exchange": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_queue: import using name@vhost
+	"rabbitmq_queue": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_binding: import using vhost/source/destination/destination_type/properties_key
+	// properties_key is computed, so we use IdentifierFromProvider
+	"rabbitmq_binding": identifierFromProvider(),
+	// rabbitmq_policy: import using name@vhost
+	"rabbitmq_policy": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_operator_policy: import using name@vhost
+	"rabbitmq_operator_policy": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_federation_upstream: import using name@vhost
+	"rabbitmq_federation_upstream": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
+	// rabbitmq_shovel: import using name@vhost
+	"rabbitmq_shovel": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}@{{ .parameters.vhost }}"),
 }
 
-func idWithStub() config.ExternalName {
+func identifierFromProvider() config.ExternalName {
 	e := config.IdentifierFromProvider
 	e.GetExternalNameFn = func(tfstate map[string]any) (string, error) {
 		en, _ := config.IDAsExternalName(tfstate)

@@ -22,6 +22,16 @@ const (
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
 	errUnmarshalCredentials = "cannot unmarshal rabbitmqtf credentials as JSON"
+
+	// RabbitMQ provider configuration keys
+	keyEndpoint       = "endpoint"
+	keyUsername       = "username"
+	keyPassword       = "password"
+	keyInsecure       = "insecure"
+	keyCacertFile     = "cacert_file"
+	keyClientcertFile = "clientcert_file"
+	keyClientkeyFile  = "clientkey_file"
+	keyProxy          = "proxy"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -50,11 +60,33 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
 
-		// Set credentials in Terraform provider configuration.
-		/*ps.Configuration = map[string]any{
-			"username": creds["username"],
-			"password": creds["password"],
-		}*/
+		// Set RabbitMQ provider configuration from credentials
+		ps.Configuration = map[string]any{}
+		if v, ok := creds[keyEndpoint]; ok {
+			ps.Configuration[keyEndpoint] = v
+		}
+		if v, ok := creds[keyUsername]; ok {
+			ps.Configuration[keyUsername] = v
+		}
+		if v, ok := creds[keyPassword]; ok {
+			ps.Configuration[keyPassword] = v
+		}
+		// Optional configuration
+		if v, ok := creds[keyInsecure]; ok {
+			ps.Configuration[keyInsecure] = v
+		}
+		if v, ok := creds[keyCacertFile]; ok {
+			ps.Configuration[keyCacertFile] = v
+		}
+		if v, ok := creds[keyClientcertFile]; ok {
+			ps.Configuration[keyClientcertFile] = v
+		}
+		if v, ok := creds[keyClientkeyFile]; ok {
+			ps.Configuration[keyClientkeyFile] = v
+		}
+		if v, ok := creds[keyProxy]; ok {
+			ps.Configuration[keyProxy] = v
+		}
 		return ps, nil
 	}
 }
